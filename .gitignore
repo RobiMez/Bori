@@ -133,3 +133,5 @@ dmypy.json
 # Telethon
 *.session
 *.session-journal
+
+jobs.sqlite
