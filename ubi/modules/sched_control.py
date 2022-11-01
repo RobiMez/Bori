@@ -69,7 +69,6 @@ async def scheduler_start(event):
 @u.on(admin_cmd(pattern=".s jobs"))
 async def scheduler_start(event):
     try : 
-        
         jobs = list(list_jobs())
         jobarr = []
         # print(jobs)
