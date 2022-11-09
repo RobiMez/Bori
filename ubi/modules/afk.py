@@ -6,16 +6,7 @@ from datetime import timedelta
 # need to handle global events like getting online and offline soon
 # but for now we just do manual commands
 
-# Create operation
-create_query = '''CREATE TABLE if not exists afk (
-  ID INTEGER PRIMARY KEY,
-  reason TEXT,
-  eta DATETIME,
-  afkd DATETIME,
-  latest BOOL
-  );
-  '''
-c.execute(create_query)
+
 
 
 # format : .afk some long ass reason |eta: 1xd

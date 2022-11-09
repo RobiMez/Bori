@@ -55,6 +55,17 @@ c = db.cursor()
 query = 'select sqlite_version();'
 c.execute(query)
 
+# Create operation
+create_query = '''CREATE TABLE if not exists afk (
+  ID INTEGER PRIMARY KEY,
+  reason TEXT,
+  eta DATETIME,
+  afkd DATETIME,
+  latest BOOL
+  );
+  '''
+c.execute(create_query)
+
 # Fetch and output result
 result = c.fetchall()
 l.info(f'SQLite Version is {result[0][0]}')
