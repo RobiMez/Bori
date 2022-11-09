@@ -51,9 +51,7 @@ def admin_cmd(pattern):
 # DATABASE --------------------------------------------------------------------------------
 db = sqlite3.connect(DB_URL)
 c = db.cursor()
-# Write a query and execute it with cursor
-query = 'select sqlite_version();'
-c.execute(query)
+
 
 # Create operation
 create_query = '''CREATE TABLE if not exists afk (
@@ -66,6 +64,9 @@ create_query = '''CREATE TABLE if not exists afk (
   '''
 c.execute(create_query)
 
+# Write a query and execute it with cursor
+query = 'select sqlite_version();'
+c.execute(query)
 # Fetch and output result
 result = c.fetchall()
 l.info(f'SQLite Version is {result[0][0]}')
