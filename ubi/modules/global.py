@@ -32,8 +32,8 @@ async def reply_on_afk(event):
 
         await event.reply("**Robi is currently unavailable** \n"
                           f" Reason given : __{res[1]}__\n"
-                          f" Back by : `{tdiff}`\n"
-                          f" Went offline at : `{res[3]}`\n\n"
+                          f" ~~Back by : `{res[2]}`\n~~"
+                          f" ~~Went offline at : `{res[3]}`\n\n~~"
 
                           f"__This is an automated response__\n"
                           "__This message should only display once per user , in private messages or when someone replies to me in a group . Please mute me if anything malufunctions , thanks .__"
@@ -43,7 +43,11 @@ async def reply_on_afk(event):
 
 @u.on(events.NewMessage(outgoing=True, func=lambda e: True if c.execute("SELECT * from afk where latest=1").fetchone() != None else False))
 async def unafk(event):
+    print(event.original_update.message.message[:3])
+    print(type(event))
     if isinstance(event, events.MessageEdited):
+        return
+    if event.original_update.message.message[:4] == ".afk":
         return
     print(f"unafking ...")
     c.execute("""
