@@ -1,10 +1,10 @@
 ''' Cat pictures and gifs '''
 
-
 import requests
 from telethon import events
 
 from ubi import u 
+
 url = ' https://api.thecatapi.com/v1/images/search'
 url_gif = ' https://api.thecatapi.com/v1/images/search?mime_types=gif'
 

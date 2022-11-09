@@ -1,0 +1,7 @@
+telethon
+# opencv-python
+colorthief
+python-dotenv
+apscheduler
+SQLAlchemy
+requests

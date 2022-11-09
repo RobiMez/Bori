@@ -1,18 +1,30 @@
 import asyncio
 import time
+import sys
 import importlib
-
-from ubi import u, log , s
+import importlib.util
+from pprint import pprint
+from ubi import u, l, s , c
 from ubi.modules import ALL_MODULES
 
 loop = asyncio.get_event_loop()
+LOADED_MODS = []
+
+
+async def load_module(modul):
+    l.info(f"💾 Loading : {modul}")
+    importlib.import_module("ubi.modules." + modul)
+
+
+async def unload_module(modul):
+    pass
 
 
 async def main():
     await u.start()
     for modul in ALL_MODULES:
-        log.info(f"💾 Loading : {modul}")
-        importlib.import_module("ubi.modules." + modul)
+        await load_module(modul)
+        LOADED_MODS.append(modul)
 
     me = await u.get_me()
     fname = me.first_name if me.first_name else ''
@@ -21,21 +33,19 @@ async def main():
     uid = str(me.id) if me.id else ''
     isbot = "🔥" if not me.bot else "🤖"
 
-    log.info(
+    l.info(
         f"{isbot} Ubi Ready and linked to ⎣ {fname + lname + ' @'+ uname + ' ' + uid} ⎤ ")
     await u.run_until_disconnected()
-
 
 
 if __name__ == '__main__':
     BOT_RUNTIME = int(time.time())
     try:
-        s.start()
         loop.run_until_complete(main())
 
     except KeyboardInterrupt:
-        # log.info("🧹 Removing all jobs !")
-        # s.remove_all_jobs()
-        log.info("🧹 Shutting down Scheduler !")
+        l.info("🧹 Closing db cursor !")
+        c.close()
+        l.info("🧹 Shutting down Scheduler !")
         s.shutdown()
-        log.info("💀 Bot Dead !")
+        l.info("💀 Bot Dead !")

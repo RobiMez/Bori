@@ -1,18 +1,17 @@
 from datetime import datetime, timedelta
 from telethon import events
 import asyncio
-from ubi import u, s, admin_cmd , log
+from ubi import u, s, admin_cmd , l
 
 del_timeout = 1
 
 
 def start_aps():
     s.start()
-    log.info('Started scheduler.')
 
 
 def remove_all_jobs():
-    log.info('Removing all jobs...')
+    l.info('Removing all jobs...')
     s.remove_all_jobs()
 
 

@@ -1,4 +1,4 @@
-from ubi import USERBOT_LOAD, USERBOT_NOLOAD, log
+from ubi import USERBOT_LOAD, USERBOT_NOLOAD, l
 
 
 def __list_all_modules():
@@ -14,12 +14,12 @@ def __list_all_modules():
         to_load = USERBOT_LOAD
         if to_load:
             if not all(any(mod == module_name for module_name in all_modules) for mod in to_load):
-                log.error("Invalid Module name for userbot!")
+                l.error("Invalid Module name for userbot!")
                 quit(1)
         else:
             to_load = all_modules
         if USERBOT_NOLOAD:
-            log.info("Userbot No load: {}".format(USERBOT_NOLOAD))
+            l.info("Userbot No load: {}".format(USERBOT_NOLOAD))
             return [item for item in to_load if item not in USERBOT_NOLOAD]
         return to_load
     return all_modules

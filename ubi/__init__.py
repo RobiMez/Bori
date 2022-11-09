@@ -1,39 +1,29 @@
-import imp
-import os
-import logging
-from pathlib import Path
-from telethon import TelegramClient, connection, events
-from telethon.sessions import StringSession
-from dotenv import load_dotenv
-import re
+"""Global thingies get defined here"""
 
+import os
+import re
+import sqlite3
+import logging
+
+from pytz import utc
+from pathlib import Path
+from dotenv import load_dotenv
+
+from telethon import TelegramClient, events
+from telethon.sessions import StringSession
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from pytz import utc
-
-jobstores = {
-    'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
-}
-s = AsyncIOScheduler(daemon=True, jobstores=jobstores, timezone=utc)
-
-
-def admin_cmd(pattern):
-    return events.NewMessage(outgoing=True, pattern=re.compile(pattern))
-
 
 load_dotenv(dotenv_path=Path('.env'))
 
-# APP_SESSION = "ubi"
 API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESH = os.environ.get("SESH")
+DB_URL = os.environ.get("DB_URL")
 
-USERBOT_LOAD = []
-USERBOT_NOLOAD = []
 
-u : TelegramClient = TelegramClient(api_id=int(API_ID), api_hash=API_HASH, session=StringSession(SESH)).start()
-
+# LOGGER ----------------------------------------------------------------------------------
 LOG_FORMAT = "[%(asctime)s.%(msecs)03d] %(filename)s:%(lineno)s %(levelname)s: %(message)s"
 
 logging.basicConfig(
@@ -41,4 +31,52 @@ logging.basicConfig(
     format=LOG_FORMAT,
     datefmt='%m-%d %H:%M',)
 
-log = logging.getLogger()
+l = logging.getLogger()
+# LOGGER ----------------------------------------------------------------------------------
+
+
+# SCHEDULER -------------------------------------------------------------------------------
+jobstores = {
+    'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+}
+s = AsyncIOScheduler(daemon=True, jobstores=jobstores, timezone=utc)
+s.start()
+
+
+def admin_cmd(pattern):
+    return events.NewMessage(outgoing=True, pattern=re.compile(pattern))
+# SCHEDULER -------------------------------------------------------------------------------
+
+
+# DATABASE --------------------------------------------------------------------------------
+db = sqlite3.connect(DB_URL)
+c = db.cursor()
+# Write a query and execute it with cursor
+query = 'select sqlite_version();'
+c.execute(query)
+
+# Fetch and output result
+result = c.fetchall()
+l.info(f'SQLite Version is {result[0][0]}')
+# DATABASE --------------------------------------------------------------------------------
+
+
+# TELEGRAM CLIENT -------------------------------------------------------------------------
+USERBOT_LOAD = []
+USERBOT_NOLOAD = []
+
+u: TelegramClient = TelegramClient(
+    api_id=int(API_ID), api_hash=API_HASH, session=StringSession(SESH)).start()
+# TELEGRAM CLIENT -------------------------------------------------------------------------
+
+
+# STATES ----------------------------------------------------------------------------------
+res = c.execute("SELECT * from afk where latest=1").fetchone()
+
+if res == None:
+    IS_AFK = False
+else:
+    IS_AFK = True
+
+
+# STATES ----------------------------------------------------------------------------------

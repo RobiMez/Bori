@@ -1,4 +1,4 @@
-import cv2
+# import cv2
 import os
 import asyncio
 import math
@@ -104,6 +104,10 @@ async def _(event):
             print(isanimated)
             # is an animated gif 
             if isanimated and mimetype == "video/mp4" and size < 5000000:
+                # temp disable gif handling because of cv2 big 
+                if out : await event.edit("Unsupported file type")
+                else : await msg.edit("Unsupported file type")
+                return
                 # downloads media
                 await u.download_media(target,'domcol.mp4')
                 vidcap = cv2.VideoCapture('domcol.mp4')

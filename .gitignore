@@ -1,3 +1,9 @@
+bin
+include
+lib
+lib64
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,11 +133,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-.idea
-
-# Telethon
-*.session
-*.session-journal
-
+pyvenv.cfg
 jobs.sqlite
+db.db
