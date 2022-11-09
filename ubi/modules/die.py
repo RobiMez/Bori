@@ -9,4 +9,4 @@ async def _(event):
     if event.fwd_from:
         return
     await event.edit("Okay ;< ...")
-    u.disconnect()
+    await u.disconnect()
