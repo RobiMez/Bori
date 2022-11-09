@@ -32,8 +32,8 @@ async def reply_on_afk(event):
 
         await event.reply("**Robi is currently unavailable** \n"
                           f" Reason given : __{res[1]}__\n"
-                          f" ~~Back by : `{res[2]}`\n~~"
-                          f" ~~Went offline at : `{res[3]}`\n\n~~"
+                          f" Back by : `{res[2]}`\n"
+                          f" Went offline at : `{res[3]}`\n\n"
 
                           f"__This is an automated response__\n"
                           "__This message should only display once per user , in private messages or when someone replies to me in a group . Please mute me if anything malufunctions , thanks .__"
