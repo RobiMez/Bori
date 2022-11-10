@@ -4,6 +4,7 @@ import os
 import re
 import sqlite3
 import logging
+import pymongo
 
 from pytz import utc
 from pathlib import Path
@@ -21,6 +22,7 @@ API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESH = os.environ.get("SESH")
 DB_URL = os.environ.get("DB_URL")
+MDB_URL = os.environ.get("MDB_URL")
 
 
 # LOGGER ----------------------------------------------------------------------------------
@@ -48,10 +50,11 @@ def admin_cmd(pattern):
 # SCHEDULER -------------------------------------------------------------------------------
 
 
-# DATABASE --------------------------------------------------------------------------------
+# DATABASES --------------------------------------------------------------------------------
 db = sqlite3.connect(DB_URL)
 c = db.cursor()
 
+m = pymongo.MongoClient(MDB_URL)
 
 # Create operation
 create_query = '''CREATE TABLE if not exists afk (
@@ -70,7 +73,7 @@ c.execute(query)
 # Fetch and output result
 result = c.fetchall()
 l.info(f'SQLite Version is {result[0][0]}')
-# DATABASE --------------------------------------------------------------------------------
+# DATABASES --------------------------------------------------------------------------------
 
 
 # TELEGRAM CLIENT -------------------------------------------------------------------------

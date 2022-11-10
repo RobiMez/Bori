@@ -1,13 +1,10 @@
 from telethon import events
+from telethon.tl.types import UpdateUserStatus , UserStatusOnline , UserStatusOffline 
 import asyncio
 from datetime import datetime
-from ubi import u, c, l, db
+from ubi import u, c, l, db , m
 
 notified_afk = []
-
-
-
-
 
 @u.on(events.NewMessage(incoming=True, func=lambda e: bool(
     (e.mentioned or e.is_private) and True if c.execute("SELECT * from afk where latest=1").fetchone() != None else False)))
@@ -56,3 +53,16 @@ async def unafk(event):
     msg = await event.reply("Unset afk.")
     await asyncio.sleep(2)
     await msg.delete()
+
+
+@u.on(events.UserUpdate)
+async def user_update_handler(event):
+    # mdb = m.statusChanges
+    print("\n")
+    print(event.stringify())
+    print("\n")
+    print(await u.get_me().id)
+    if isinstance(event.original_update ==  UpdateUserStatus) : 
+        print("Update is a user status update")
+
+    # print(f"{event.original_update.user_id}")
