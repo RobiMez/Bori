@@ -136,3 +136,6 @@ dmypy.json
 pyvenv.cfg
 jobs.sqlite
 db.db
+
+
+*.session

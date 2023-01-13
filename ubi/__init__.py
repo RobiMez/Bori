@@ -81,7 +81,9 @@ USERBOT_LOAD = []
 USERBOT_NOLOAD = []
 
 u: TelegramClient = TelegramClient(
-    api_id=int(API_ID), api_hash=API_HASH, session=StringSession(SESH)).start()
+    "robisesh",
+    api_id=int(API_ID),
+    api_hash=API_HASH).start()
 # TELEGRAM CLIENT -------------------------------------------------------------------------
 
 

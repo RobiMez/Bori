@@ -7,8 +7,6 @@ from datetime import timedelta
 # but for now we just do manual commands
 
 
-
-
 # format : .afk some long ass reason |eta: 1xd
 @u.on(events.NewMessage(pattern="\.afk (.*)", outgoing=True))
 async def _(event):

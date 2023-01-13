@@ -1,5 +1,5 @@
 from telethon import events
-from telethon.tl.types import UpdateUserStatus , UserStatusOnline , UserStatusOffline 
+from telethon.tl.types import *
 import asyncio
 from datetime import datetime
 from ubi import u, c, l, db , m
@@ -57,12 +57,16 @@ async def unafk(event):
 
 @u.on(events.UserUpdate)
 async def user_update_handler(event):
-    # mdb = m.statusChanges
-    print("\n")
-    print(event.stringify())
-    print("\n")
-    print(await u.get_me().id)
-    if isinstance(event.original_update ==  UpdateUserStatus) : 
-        print("Update is a user status update")
-
-    # print(f"{event.original_update.user_id}")
+    mdb = m.statusChanges
+    # print("\n")
+    # print(event.stringify())
+    # print("\n")
+    me = await u.get_me()
+    if isinstance(event.original_update , UpdateUserStatus):
+        if event.original_update.user_id == me.id :
+            if isinstance(event.original_update.status , UserStatusOnline):
+                print("Human is online")
+            elif isinstance(event.original_update.status , UserStatusOffline):
+                print("Human went offline")
+            elif isinstance(event.original_update , UpdateChannelUserTyping):
+                print("Human went offline")
