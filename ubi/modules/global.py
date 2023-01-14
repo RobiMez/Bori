@@ -2,9 +2,10 @@ from telethon import events
 from telethon.tl.types import *
 import asyncio
 from datetime import datetime
-from ubi import u, c, l, db , m
+from ubi import u, c, l, db, m
 
 notified_afk = []
+
 
 @u.on(events.NewMessage(incoming=True, func=lambda e: bool(
     (e.mentioned or e.is_private) and True if c.execute("SELECT * from afk where latest=1").fetchone() != None else False)))
@@ -54,19 +55,30 @@ async def unafk(event):
     await asyncio.sleep(2)
     await msg.delete()
 
-
+mdb = m.stats
+mcol = mdb.OnlineStatusChanges
 @u.on(events.UserUpdate)
 async def user_update_handler(event):
-    mdb = m.statusChanges
-    # print("\n")
-    # print(event.stringify())
-    # print("\n")
+    l.debug(event)
+    # Inits a datapack with a null change to 
+    OnlineStatusChange = {
+        "type": "OnlineStatusChange",
+        "timestamp": datetime.utcnow(),
+        # 0 for offline 1 for online ( expand with more ints, -1 for null )
+        "changeto":  -1
+        }
     me = await u.get_me()
-    if isinstance(event.original_update , UpdateUserStatus):
-        if event.original_update.user_id == me.id :
-            if isinstance(event.original_update.status , UserStatusOnline):
-                print("Human is online")
-            elif isinstance(event.original_update.status , UserStatusOffline):
-                print("Human went offline")
-            elif isinstance(event.original_update , UpdateChannelUserTyping):
-                print("Human went offline")
+    if isinstance(event.original_update, UpdateUserStatus):
+        if event.original_update.user_id == me.id:
+            if isinstance(event.original_update.status, UserStatusOnline):
+                # print("Human is online")
+                OnlineStatusChange["changeto"] = 1
+                persist(OnlineStatusChange)
+            elif isinstance(event.original_update.status, UserStatusOffline):
+                # print("Human went offline")
+                OnlineStatusChange["changeto"] = 0
+                persist(OnlineStatusChange)
+
+def persist(OnlineStatusChange):
+    # print(OnlineStatusChange)
+    mcol.insert_one(OnlineStatusChange)
