@@ -139,3 +139,4 @@ db.db
 
 
 *.session
+*.session-journal
